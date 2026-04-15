@@ -11,7 +11,6 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "baseUrl": ".",
     // File Layout
     "rootDir": "./src",
     "outDir": "./dist",

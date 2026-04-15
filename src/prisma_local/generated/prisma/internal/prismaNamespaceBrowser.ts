@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Movie: 'Movie',
   Ticket: 'Ticket'
 } as const
 
@@ -86,12 +87,25 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const MovieScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  director: 'director',
+  actor: 'actor',
+  duration: 'duration',
+  description: 'description',
+  createdAt: 'createdAt'
+} as const
+
+export type MovieScalarFieldEnum = (typeof MovieScalarFieldEnum)[keyof typeof MovieScalarFieldEnum]
+
+
 export const TicketScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  name: 'name',
-  price: 'price',
-  quantity: 'quantity',
+  movieId: 'movieId',
+  isBooked: 'isBooked',
+  seat: 'seat',
   createdAt: 'createdAt'
 } as const
 

@@ -29,41 +29,41 @@ export type AggregateTicket = {
 export type TicketAvgAggregateOutputType = {
   id: number | null
   userId: number | null
-  price: number | null
-  quantity: number | null
+  movieId: number | null
+  seat: number | null
 }
 
 export type TicketSumAggregateOutputType = {
   id: number | null
   userId: number | null
-  price: number | null
-  quantity: number | null
+  movieId: number | null
+  seat: number | null
 }
 
 export type TicketMinAggregateOutputType = {
   id: number | null
   userId: number | null
-  name: string | null
-  price: number | null
-  quantity: number | null
+  movieId: number | null
+  isBooked: boolean | null
+  seat: number | null
   createdAt: Date | null
 }
 
 export type TicketMaxAggregateOutputType = {
   id: number | null
   userId: number | null
-  name: string | null
-  price: number | null
-  quantity: number | null
+  movieId: number | null
+  isBooked: boolean | null
+  seat: number | null
   createdAt: Date | null
 }
 
 export type TicketCountAggregateOutputType = {
   id: number
   userId: number
-  name: number
-  price: number
-  quantity: number
+  movieId: number
+  isBooked: number
+  seat: number
   createdAt: number
   _all: number
 }
@@ -72,41 +72,41 @@ export type TicketCountAggregateOutputType = {
 export type TicketAvgAggregateInputType = {
   id?: true
   userId?: true
-  price?: true
-  quantity?: true
+  movieId?: true
+  seat?: true
 }
 
 export type TicketSumAggregateInputType = {
   id?: true
   userId?: true
-  price?: true
-  quantity?: true
+  movieId?: true
+  seat?: true
 }
 
 export type TicketMinAggregateInputType = {
   id?: true
   userId?: true
-  name?: true
-  price?: true
-  quantity?: true
+  movieId?: true
+  isBooked?: true
+  seat?: true
   createdAt?: true
 }
 
 export type TicketMaxAggregateInputType = {
   id?: true
   userId?: true
-  name?: true
-  price?: true
-  quantity?: true
+  movieId?: true
+  isBooked?: true
+  seat?: true
   createdAt?: true
 }
 
 export type TicketCountAggregateInputType = {
   id?: true
   userId?: true
-  name?: true
-  price?: true
-  quantity?: true
+  movieId?: true
+  isBooked?: true
+  seat?: true
   createdAt?: true
   _all?: true
 }
@@ -199,10 +199,10 @@ export type TicketGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 
 export type TicketGroupByOutputType = {
   id: number
-  userId: number
-  name: string
-  price: number
-  quantity: number
+  userId: number | null
+  movieId: number
+  isBooked: boolean
+  seat: number
   createdAt: Date
   _count: TicketCountAggregateOutputType | null
   _avg: TicketAvgAggregateOutputType | null
@@ -231,22 +231,24 @@ export type TicketWhereInput = {
   OR?: Prisma.TicketWhereInput[]
   NOT?: Prisma.TicketWhereInput | Prisma.TicketWhereInput[]
   id?: Prisma.IntFilter<"Ticket"> | number
-  userId?: Prisma.IntFilter<"Ticket"> | number
-  name?: Prisma.StringFilter<"Ticket"> | string
-  price?: Prisma.IntFilter<"Ticket"> | number
-  quantity?: Prisma.IntFilter<"Ticket"> | number
+  userId?: Prisma.IntNullableFilter<"Ticket"> | number | null
+  movieId?: Prisma.IntFilter<"Ticket"> | number
+  isBooked?: Prisma.BoolFilter<"Ticket"> | boolean
+  seat?: Prisma.IntFilter<"Ticket"> | number
   createdAt?: Prisma.DateTimeFilter<"Ticket"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  movie?: Prisma.XOR<Prisma.MovieScalarRelationFilter, Prisma.MovieWhereInput>
 }
 
 export type TicketOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  quantity?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  movieId?: Prisma.SortOrder
+  isBooked?: Prisma.SortOrder
+  seat?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  movie?: Prisma.MovieOrderByWithRelationInput
 }
 
 export type TicketWhereUniqueInput = Prisma.AtLeast<{
@@ -254,20 +256,21 @@ export type TicketWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.TicketWhereInput | Prisma.TicketWhereInput[]
   OR?: Prisma.TicketWhereInput[]
   NOT?: Prisma.TicketWhereInput | Prisma.TicketWhereInput[]
-  userId?: Prisma.IntFilter<"Ticket"> | number
-  name?: Prisma.StringFilter<"Ticket"> | string
-  price?: Prisma.IntFilter<"Ticket"> | number
-  quantity?: Prisma.IntFilter<"Ticket"> | number
+  userId?: Prisma.IntNullableFilter<"Ticket"> | number | null
+  movieId?: Prisma.IntFilter<"Ticket"> | number
+  isBooked?: Prisma.BoolFilter<"Ticket"> | boolean
+  seat?: Prisma.IntFilter<"Ticket"> | number
   createdAt?: Prisma.DateTimeFilter<"Ticket"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  movie?: Prisma.XOR<Prisma.MovieScalarRelationFilter, Prisma.MovieWhereInput>
 }, "id">
 
 export type TicketOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  quantity?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  movieId?: Prisma.SortOrder
+  isBooked?: Prisma.SortOrder
+  seat?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.TicketCountOrderByAggregateInput
   _avg?: Prisma.TicketAvgOrderByAggregateInput
@@ -281,69 +284,68 @@ export type TicketScalarWhereWithAggregatesInput = {
   OR?: Prisma.TicketScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TicketScalarWhereWithAggregatesInput | Prisma.TicketScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Ticket"> | number
-  userId?: Prisma.IntWithAggregatesFilter<"Ticket"> | number
-  name?: Prisma.StringWithAggregatesFilter<"Ticket"> | string
-  price?: Prisma.IntWithAggregatesFilter<"Ticket"> | number
-  quantity?: Prisma.IntWithAggregatesFilter<"Ticket"> | number
+  userId?: Prisma.IntNullableWithAggregatesFilter<"Ticket"> | number | null
+  movieId?: Prisma.IntWithAggregatesFilter<"Ticket"> | number
+  isBooked?: Prisma.BoolWithAggregatesFilter<"Ticket"> | boolean
+  seat?: Prisma.IntWithAggregatesFilter<"Ticket"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Ticket"> | Date | string
 }
 
 export type TicketCreateInput = {
-  name: string
-  price: number
-  quantity: number
+  isBooked?: boolean
+  seat: number
   createdAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutTicketsInput
+  user?: Prisma.UserCreateNestedOneWithoutTicketsInput
+  movie: Prisma.MovieCreateNestedOneWithoutTicketsInput
 }
 
 export type TicketUncheckedCreateInput = {
   id?: number
-  userId: number
-  name: string
-  price: number
-  quantity: number
+  userId?: number | null
+  movieId: number
+  isBooked?: boolean
+  seat: number
   createdAt?: Date | string
 }
 
 export type TicketUpdateInput = {
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isBooked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  seat?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutTicketsNestedInput
+  user?: Prisma.UserUpdateOneWithoutTicketsNestedInput
+  movie?: Prisma.MovieUpdateOneRequiredWithoutTicketsNestedInput
 }
 
 export type TicketUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  movieId?: Prisma.IntFieldUpdateOperationsInput | number
+  isBooked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  seat?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type TicketCreateManyInput = {
   id?: number
-  userId: number
-  name: string
-  price: number
-  quantity: number
+  userId?: number | null
+  movieId: number
+  isBooked?: boolean
+  seat: number
   createdAt?: Date | string
 }
 
 export type TicketUpdateManyMutationInput = {
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isBooked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  seat?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type TicketUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  movieId?: Prisma.IntFieldUpdateOperationsInput | number
+  isBooked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  seat?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -360,42 +362,42 @@ export type TicketOrderByRelationAggregateInput = {
 export type TicketCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  quantity?: Prisma.SortOrder
+  movieId?: Prisma.SortOrder
+  isBooked?: Prisma.SortOrder
+  seat?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type TicketAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  quantity?: Prisma.SortOrder
+  movieId?: Prisma.SortOrder
+  seat?: Prisma.SortOrder
 }
 
 export type TicketMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  quantity?: Prisma.SortOrder
+  movieId?: Prisma.SortOrder
+  isBooked?: Prisma.SortOrder
+  seat?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type TicketMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  quantity?: Prisma.SortOrder
+  movieId?: Prisma.SortOrder
+  isBooked?: Prisma.SortOrder
+  seat?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type TicketSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  quantity?: Prisma.SortOrder
+  movieId?: Prisma.SortOrder
+  seat?: Prisma.SortOrder
 }
 
 export type TicketCreateNestedManyWithoutUserInput = {
@@ -440,18 +442,72 @@ export type TicketUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.TicketScalarWhereInput | Prisma.TicketScalarWhereInput[]
 }
 
+export type TicketCreateNestedManyWithoutMovieInput = {
+  create?: Prisma.XOR<Prisma.TicketCreateWithoutMovieInput, Prisma.TicketUncheckedCreateWithoutMovieInput> | Prisma.TicketCreateWithoutMovieInput[] | Prisma.TicketUncheckedCreateWithoutMovieInput[]
+  connectOrCreate?: Prisma.TicketCreateOrConnectWithoutMovieInput | Prisma.TicketCreateOrConnectWithoutMovieInput[]
+  createMany?: Prisma.TicketCreateManyMovieInputEnvelope
+  connect?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+}
+
+export type TicketUncheckedCreateNestedManyWithoutMovieInput = {
+  create?: Prisma.XOR<Prisma.TicketCreateWithoutMovieInput, Prisma.TicketUncheckedCreateWithoutMovieInput> | Prisma.TicketCreateWithoutMovieInput[] | Prisma.TicketUncheckedCreateWithoutMovieInput[]
+  connectOrCreate?: Prisma.TicketCreateOrConnectWithoutMovieInput | Prisma.TicketCreateOrConnectWithoutMovieInput[]
+  createMany?: Prisma.TicketCreateManyMovieInputEnvelope
+  connect?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+}
+
+export type TicketUpdateManyWithoutMovieNestedInput = {
+  create?: Prisma.XOR<Prisma.TicketCreateWithoutMovieInput, Prisma.TicketUncheckedCreateWithoutMovieInput> | Prisma.TicketCreateWithoutMovieInput[] | Prisma.TicketUncheckedCreateWithoutMovieInput[]
+  connectOrCreate?: Prisma.TicketCreateOrConnectWithoutMovieInput | Prisma.TicketCreateOrConnectWithoutMovieInput[]
+  upsert?: Prisma.TicketUpsertWithWhereUniqueWithoutMovieInput | Prisma.TicketUpsertWithWhereUniqueWithoutMovieInput[]
+  createMany?: Prisma.TicketCreateManyMovieInputEnvelope
+  set?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+  disconnect?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+  delete?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+  connect?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+  update?: Prisma.TicketUpdateWithWhereUniqueWithoutMovieInput | Prisma.TicketUpdateWithWhereUniqueWithoutMovieInput[]
+  updateMany?: Prisma.TicketUpdateManyWithWhereWithoutMovieInput | Prisma.TicketUpdateManyWithWhereWithoutMovieInput[]
+  deleteMany?: Prisma.TicketScalarWhereInput | Prisma.TicketScalarWhereInput[]
+}
+
+export type TicketUncheckedUpdateManyWithoutMovieNestedInput = {
+  create?: Prisma.XOR<Prisma.TicketCreateWithoutMovieInput, Prisma.TicketUncheckedCreateWithoutMovieInput> | Prisma.TicketCreateWithoutMovieInput[] | Prisma.TicketUncheckedCreateWithoutMovieInput[]
+  connectOrCreate?: Prisma.TicketCreateOrConnectWithoutMovieInput | Prisma.TicketCreateOrConnectWithoutMovieInput[]
+  upsert?: Prisma.TicketUpsertWithWhereUniqueWithoutMovieInput | Prisma.TicketUpsertWithWhereUniqueWithoutMovieInput[]
+  createMany?: Prisma.TicketCreateManyMovieInputEnvelope
+  set?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+  disconnect?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+  delete?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+  connect?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+  update?: Prisma.TicketUpdateWithWhereUniqueWithoutMovieInput | Prisma.TicketUpdateWithWhereUniqueWithoutMovieInput[]
+  updateMany?: Prisma.TicketUpdateManyWithWhereWithoutMovieInput | Prisma.TicketUpdateManyWithWhereWithoutMovieInput[]
+  deleteMany?: Prisma.TicketScalarWhereInput | Prisma.TicketScalarWhereInput[]
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type TicketCreateWithoutUserInput = {
-  name: string
-  price: number
-  quantity: number
+  isBooked?: boolean
+  seat: number
   createdAt?: Date | string
+  movie: Prisma.MovieCreateNestedOneWithoutTicketsInput
 }
 
 export type TicketUncheckedCreateWithoutUserInput = {
   id?: number
-  name: string
-  price: number
-  quantity: number
+  movieId: number
+  isBooked?: boolean
+  seat: number
   createdAt?: Date | string
 }
 
@@ -486,41 +542,113 @@ export type TicketScalarWhereInput = {
   OR?: Prisma.TicketScalarWhereInput[]
   NOT?: Prisma.TicketScalarWhereInput | Prisma.TicketScalarWhereInput[]
   id?: Prisma.IntFilter<"Ticket"> | number
-  userId?: Prisma.IntFilter<"Ticket"> | number
-  name?: Prisma.StringFilter<"Ticket"> | string
-  price?: Prisma.IntFilter<"Ticket"> | number
-  quantity?: Prisma.IntFilter<"Ticket"> | number
+  userId?: Prisma.IntNullableFilter<"Ticket"> | number | null
+  movieId?: Prisma.IntFilter<"Ticket"> | number
+  isBooked?: Prisma.BoolFilter<"Ticket"> | boolean
+  seat?: Prisma.IntFilter<"Ticket"> | number
   createdAt?: Prisma.DateTimeFilter<"Ticket"> | Date | string
+}
+
+export type TicketCreateWithoutMovieInput = {
+  isBooked?: boolean
+  seat: number
+  createdAt?: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutTicketsInput
+}
+
+export type TicketUncheckedCreateWithoutMovieInput = {
+  id?: number
+  userId?: number | null
+  isBooked?: boolean
+  seat: number
+  createdAt?: Date | string
+}
+
+export type TicketCreateOrConnectWithoutMovieInput = {
+  where: Prisma.TicketWhereUniqueInput
+  create: Prisma.XOR<Prisma.TicketCreateWithoutMovieInput, Prisma.TicketUncheckedCreateWithoutMovieInput>
+}
+
+export type TicketCreateManyMovieInputEnvelope = {
+  data: Prisma.TicketCreateManyMovieInput | Prisma.TicketCreateManyMovieInput[]
+  skipDuplicates?: boolean
+}
+
+export type TicketUpsertWithWhereUniqueWithoutMovieInput = {
+  where: Prisma.TicketWhereUniqueInput
+  update: Prisma.XOR<Prisma.TicketUpdateWithoutMovieInput, Prisma.TicketUncheckedUpdateWithoutMovieInput>
+  create: Prisma.XOR<Prisma.TicketCreateWithoutMovieInput, Prisma.TicketUncheckedCreateWithoutMovieInput>
+}
+
+export type TicketUpdateWithWhereUniqueWithoutMovieInput = {
+  where: Prisma.TicketWhereUniqueInput
+  data: Prisma.XOR<Prisma.TicketUpdateWithoutMovieInput, Prisma.TicketUncheckedUpdateWithoutMovieInput>
+}
+
+export type TicketUpdateManyWithWhereWithoutMovieInput = {
+  where: Prisma.TicketScalarWhereInput
+  data: Prisma.XOR<Prisma.TicketUpdateManyMutationInput, Prisma.TicketUncheckedUpdateManyWithoutMovieInput>
 }
 
 export type TicketCreateManyUserInput = {
   id?: number
-  name: string
-  price: number
-  quantity: number
+  movieId: number
+  isBooked?: boolean
+  seat: number
   createdAt?: Date | string
 }
 
 export type TicketUpdateWithoutUserInput = {
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isBooked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  seat?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  movie?: Prisma.MovieUpdateOneRequiredWithoutTicketsNestedInput
 }
 
 export type TicketUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  movieId?: Prisma.IntFieldUpdateOperationsInput | number
+  isBooked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  seat?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type TicketUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  movieId?: Prisma.IntFieldUpdateOperationsInput | number
+  isBooked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  seat?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TicketCreateManyMovieInput = {
+  id?: number
+  userId?: number | null
+  isBooked?: boolean
+  seat: number
+  createdAt?: Date | string
+}
+
+export type TicketUpdateWithoutMovieInput = {
+  isBooked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  seat?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutTicketsNestedInput
+}
+
+export type TicketUncheckedUpdateWithoutMovieInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isBooked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  seat?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TicketUncheckedUpdateManyWithoutMovieInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isBooked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  seat?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -529,64 +657,71 @@ export type TicketUncheckedUpdateManyWithoutUserInput = {
 export type TicketSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  name?: boolean
-  price?: boolean
-  quantity?: boolean
+  movieId?: boolean
+  isBooked?: boolean
+  seat?: boolean
   createdAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Ticket$userArgs<ExtArgs>
+  movie?: boolean | Prisma.MovieDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ticket"]>
 
 export type TicketSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  name?: boolean
-  price?: boolean
-  quantity?: boolean
+  movieId?: boolean
+  isBooked?: boolean
+  seat?: boolean
   createdAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Ticket$userArgs<ExtArgs>
+  movie?: boolean | Prisma.MovieDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ticket"]>
 
 export type TicketSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  name?: boolean
-  price?: boolean
-  quantity?: boolean
+  movieId?: boolean
+  isBooked?: boolean
+  seat?: boolean
   createdAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Ticket$userArgs<ExtArgs>
+  movie?: boolean | Prisma.MovieDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ticket"]>
 
 export type TicketSelectScalar = {
   id?: boolean
   userId?: boolean
-  name?: boolean
-  price?: boolean
-  quantity?: boolean
+  movieId?: boolean
+  isBooked?: boolean
+  seat?: boolean
   createdAt?: boolean
 }
 
-export type TicketOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "price" | "quantity" | "createdAt", ExtArgs["result"]["ticket"]>
+export type TicketOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "movieId" | "isBooked" | "seat" | "createdAt", ExtArgs["result"]["ticket"]>
 export type TicketInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Ticket$userArgs<ExtArgs>
+  movie?: boolean | Prisma.MovieDefaultArgs<ExtArgs>
 }
 export type TicketIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Ticket$userArgs<ExtArgs>
+  movie?: boolean | Prisma.MovieDefaultArgs<ExtArgs>
 }
 export type TicketIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Ticket$userArgs<ExtArgs>
+  movie?: boolean | Prisma.MovieDefaultArgs<ExtArgs>
 }
 
 export type $TicketPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Ticket"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs> | null
+    movie: Prisma.$MoviePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
-    userId: number
-    name: string
-    price: number
-    quantity: number
+    userId: number | null
+    movieId: number
+    isBooked: boolean
+    seat: number
     createdAt: Date
   }, ExtArgs["result"]["ticket"]>
   composites: {}
@@ -982,7 +1117,8 @@ readonly fields: TicketFieldRefs;
  */
 export interface Prisma__TicketClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.Ticket$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ticket$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  movie<T extends Prisma.MovieDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MovieDefaultArgs<ExtArgs>>): Prisma.Prisma__MovieClient<runtime.Types.Result.GetResult<Prisma.$MoviePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1014,9 +1150,9 @@ export interface Prisma__TicketClient<T, Null = never, ExtArgs extends runtime.T
 export interface TicketFieldRefs {
   readonly id: Prisma.FieldRef<"Ticket", 'Int'>
   readonly userId: Prisma.FieldRef<"Ticket", 'Int'>
-  readonly name: Prisma.FieldRef<"Ticket", 'String'>
-  readonly price: Prisma.FieldRef<"Ticket", 'Int'>
-  readonly quantity: Prisma.FieldRef<"Ticket", 'Int'>
+  readonly movieId: Prisma.FieldRef<"Ticket", 'Int'>
+  readonly isBooked: Prisma.FieldRef<"Ticket", 'Boolean'>
+  readonly seat: Prisma.FieldRef<"Ticket", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Ticket", 'DateTime'>
 }
     
@@ -1416,6 +1552,25 @@ export type TicketDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Limit how many Tickets to delete.
    */
   limit?: number
+}
+
+/**
+ * Ticket.user
+ */
+export type Ticket$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

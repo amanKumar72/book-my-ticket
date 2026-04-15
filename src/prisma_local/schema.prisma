@@ -30,12 +30,23 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+model Movie {
+  id Int @id @default(autoincrement())
+  name String
+  director String
+  actor String
+  duration Int
+  description String @default("")
+  createdAt DateTime @default(now())
+  Tickets Ticket[]
+}
 model Ticket {
   id Int @id @default(autoincrement())
-  userId Int
-  user User @relation(fields: [userId], references: [id])
-  name String
-  price Int
-  quantity Int
+  userId Int? 
+  user User? @relation(fields: [userId], references: [id])
+  movieId Int
+  movie Movie @relation(fields: [movieId], references: [id])
+  isBooked Boolean @default(false)
+  seat Int
   createdAt DateTime @default(now())
 }

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Ticket" ADD COLUMN     "isBooked" BOOLEAN NOT NULL DEFAULT false,
+ALTER COLUMN "userId" SET DEFAULT -1;
