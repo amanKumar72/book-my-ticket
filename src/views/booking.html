@@ -35,6 +35,12 @@
             Home
           </button>
           <button 
+            id="myBookingsBtn"
+            class="px-6 py-2 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-all duration-300"
+          >
+            My Bookings
+          </button>
+          <button 
             id="logoutBtn"
             class="px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-all duration-300"
           >
@@ -179,7 +185,7 @@
             `;
           }
 
-          alert('Booked successfully!');
+          // alert('Booked successfully!');
           hideBookingDialog();
         } catch (ex) {
           alert('Error booking seat: ' + ex);
@@ -283,6 +289,11 @@
       // Home button handler
       document.getElementById('homeBtn').addEventListener('click', () => {
         window.location.href = '/';
+      });
+
+      // My Bookings button handler
+      document.getElementById('myBookingsBtn').addEventListener('click', () => {
+        window.location.href = '/my-bookings';
       });
 
       // Initialize

@@ -10,22 +10,20 @@ export const bookTicket = async (req: express.Request, res: express.Response) =>
     }
 
     await prisma.$transaction(async (tx) => {
-    const ticket = await tx.$queryRaw`
-        select * from "Ticket"
-        WHERE id = ${id} 
-        AND "isBooked" = false 
-        FOR UPDATE
-    `;
+        const ticket: any[] = await tx.$queryRaw`
+            select * from "Ticket"
+            WHERE id = ${id} 
+            AND "isBooked" = false 
+            FOR UPDATE
+        `;
 
-    if (ticket.length === 0) {
-        throw new Error("Ticket not available");
-    }
-
-    // Now safely update (row is locked)
-    await tx.ticket.update({
-        where: { id: id },
-        data: { isBooked: true, userId: userId },
-    });
+        if (ticket.length === 0) {
+            throw new Error("Ticket not available");
+        }
+        await tx.ticket.update({
+            where: { id: id },
+            data: { isBooked: true, userId: userId },
+        });
     });
     res.status(200).json({ message: 'Ticket booked successfully' });
 }

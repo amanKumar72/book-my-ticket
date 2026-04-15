@@ -28,14 +28,14 @@ export const login = async (req: Request, res: Response) => {
 export const me = async (req: Request, res: Response) => {
     try {
         const user = await authService.getMe(req.user?.userId)
-        res.status(200).json(user)
+        res.status(200).json({ user })
     } catch (error) {
         console.log(`Error getting user info`)
         throw error
     }
 }
 
-export const logout = async (req: Request, res: Response) => {
+export const logout = async (_req: Request, res: Response) => {
     res.clearCookie('token', { httpOnly: true, secure: true })
     res.status(200).json({ message: 'Logout successful' })
 }

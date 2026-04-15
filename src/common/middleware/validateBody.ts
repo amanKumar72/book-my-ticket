@@ -2,7 +2,7 @@ import ApiError from "@/common/utils/apiError";
 import type { Request, Response, NextFunction } from "express";
 
 const validateBody = (Dtoclass: any) => {
-    return (req: Request, res: Response, next: NextFunction) => {
+    return (req: Request, _res: Response, next: NextFunction) => {
         const {errors, value} = Dtoclass.validate(req.body)
         console.log('errors',errors)
         if(errors){

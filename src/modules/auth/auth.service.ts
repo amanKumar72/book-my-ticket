@@ -50,9 +50,24 @@ export const getMe = async (userId ?: number) => {
     where: {
       id: userId,
     },
-    omit: {
-      password: true,
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      phone: true,
+      email: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
+      tickets: {
+        include: {
+          movie: true,
+        }
+      } 
     }
   });
+
+  if (!user) throw ApiError.notFound("User not found");
+
   return user;
 };

@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Bookings - Stellar Seat Booking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap");
+
+      body {
+        font-family: "Outfit", sans-serif;
+        background-color: #0f172a;
+        color: #f8fafc;
+      }
+
+      .bookings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .bookings-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div class="max-w-7xl w-full mx-auto flex-1 flex flex-col">
+      <div class="flex flex-col gap-6 p-6 mb-8 md:flex-row md:justify-between md:items-center">
+        <div>
+          <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 tracking-tight">
+            My Bookings
+          </h1>
+          <p class="text-slate-400 text-sm mt-2">Manage your movie ticket reservations</p>
+        </div>
+
+        <div class="flex flex-col gap-4 md:items-end">
+          <div class="text-left md:text-right">
+            <p class="text-slate-300 font-semibold" id="userName">Loading...</p>
+            <p class="text-slate-400 text-sm" id="userEmail">Loading...</p>
+          </div>
+
+          <div class="flex flex-wrap gap-4">
+            <button
+              id="homeBtn"
+              class="px-6 py-2 bg-slate-700 text-slate-100 font-semibold rounded-lg hover:bg-slate-600 transition-all duration-300"
+            >
+              Home
+            </button>
+            <button
+              id="bookBtn"
+              class="px-6 py-2 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-all duration-300"
+            >
+              Book Ticket
+            </button>
+            <button
+              id="logoutBtn"
+              class="px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-all duration-300"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-6 mb-8" id="statsSection">
+        <div class="bg-slate-800/80 backdrop-blur-xl rounded-2xl shadow-xl p-6 border border-slate-700/50">
+          <p class="text-slate-400 text-sm font-semibold tracking-wide mb-2">Total Bookings</p>
+          <div class="text-4xl font-bold text-emerald-400" id="totalBookings">0</div>
+        </div>
+        <div class="bg-slate-800/80 backdrop-blur-xl rounded-2xl shadow-xl p-6 border border-slate-700/50">
+          <p class="text-slate-400 text-sm font-semibold tracking-wide mb-2">Movies Booked</p>
+          <div class="text-4xl font-bold text-cyan-400" id="upcomingMovies">0</div>
+        </div>
+        <div class="bg-slate-800/80 backdrop-blur-xl rounded-2xl shadow-xl p-6 border border-slate-700/50">
+          <p class="text-slate-400 text-sm font-semibold tracking-wide mb-2">Account Status</p>
+          <div class="text-2xl font-bold text-emerald-400">Active</div>
+        </div>
+      </div>
+
+      <div class="flex-1 px-6 pb-12">
+        <div id="errorContainer" class="mb-6"></div>
+
+        <div class="loading" id="loadingState">
+          <div class="bg-slate-800/80 backdrop-blur-xl rounded-3xl shadow-2xl p-12 border border-slate-700/50 text-center">
+            <div class="inline-block">
+              <div class="w-12 h-12 border-4 border-slate-700 border-t-emerald-400 rounded-full animate-spin mb-4"></div>
+              <p class="text-slate-300 font-semibold">Loading your bookings...</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bookings-grid" id="bookingsContainer"></div>
+
+        <div class="empty-state" id="emptyState" style="display: none;">
+          <div class="bg-slate-800/80 backdrop-blur-xl rounded-3xl shadow-2xl p-12 border border-slate-700/50 text-center">
+            <div class="text-6xl mb-4">No Tickets</div>
+            <h3 class="text-2xl font-bold text-slate-300 mb-2">No Bookings Yet</h3>
+            <p class="text-slate-400 mb-6">You haven't booked any tickets yet.</p>
+            <button
+              id="bookNowBtn"
+              class="px-8 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold rounded-lg hover:shadow-lg hover:shadow-emerald-500/50 transition-all duration-300"
+            >
+              Book a Ticket
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE_URL = window.location.origin;
+
+      function getToken() {
+        return localStorage.getItem('token') || document.cookie
+          .split('; ')
+          .find(row => row.startsWith('token='))
+          ?.split('=')[1] || '';
+      }
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        await loadUserInfo();
+        await loadBookings();
+      });
+
+      async function loadUserInfo() {
+        try {
+          const token = getToken();
+          const response = await fetch(`${API_BASE_URL}/auth/me`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { Authorization: `Bearer ${token}` } : {})
+            },
+            credentials: 'include'
+          });
+
+          if (!response.ok) {
+            if (response.status === 401) {
+              window.location.href = '/login';
+              return;
+            }
+
+            throw new Error('Failed to load user info');
+          }
+
+          const data = await response.json();
+          const user = data.user || data;
+
+          document.getElementById('userName').textContent =
+            `${user.firstName || 'User'} ${user.lastName || ''}`.trim();
+          document.getElementById('userEmail').textContent = user.email;
+        } catch (error) {
+          console.error('Error loading user info:', error);
+          showError('Failed to load user information');
+        }
+      }
+
+      async function loadBookings() {
+        try {
+          const token = getToken();
+          const moviesResponse = await fetch(`${API_BASE_URL}/movie`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { Authorization: `Bearer ${token}` } : {})
+            },
+            credentials: 'include'
+          });
+
+          if (!moviesResponse.ok) {
+            throw new Error('Failed to load movies');
+          }
+
+          const moviesData = await moviesResponse.json();
+          const movies = moviesData.movies || [];
+
+          const userResponse = await fetch(`${API_BASE_URL}/auth/me`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { Authorization: `Bearer ${token}` } : {})
+            },
+            credentials: 'include'
+          });
+
+          if (!userResponse.ok) {
+            throw new Error('Failed to load user');
+          }
+
+          const userData = await userResponse.json();
+          const userId = userData.user?.id || userData.id;
+
+          const userBookings = [];
+
+          for (const movie of movies) {
+            const ticketResponse = await fetch(`${API_BASE_URL}/ticket/${movie.id}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { Authorization: `Bearer ${token}` } : {})
+              },
+              credentials: 'include'
+            });
+
+            if (!ticketResponse.ok) continue;
+
+            const ticketData = await ticketResponse.json();
+            const seats = ticketData.seats || [];
+
+            const userSeats = seats.filter(seat => seat.userId === userId && seat.isBooked);
+            userSeats.forEach(seat => {
+              userBookings.push({
+                ticketId: seat.id,
+                seatNumber: seat.seat,
+                movieId: movie.id,
+                movie,
+                bookingDate: seat.createdAt,
+                isBooked: true
+              });
+            });
+          }
+
+          document.getElementById('loadingState').style.display = 'none';
+
+          if (userBookings.length === 0) {
+            document.getElementById('emptyState').style.display = 'block';
+            document.getElementById('bookingsContainer').innerHTML = '';
+            document.getElementById('totalBookings').textContent = '0';
+            document.getElementById('upcomingMovies').textContent = '0';
+            return;
+          }
+
+          document.getElementById('emptyState').style.display = 'none';
+          displayBookings(userBookings);
+          document.getElementById('totalBookings').textContent = userBookings.length;
+
+          const uniqueMovies = new Set(userBookings.map(booking => booking.movieId)).size;
+          document.getElementById('upcomingMovies').textContent = uniqueMovies;
+        } catch (error) {
+          console.error('Error loading bookings:', error);
+          document.getElementById('loadingState').style.display = 'none';
+          showError('Failed to load your bookings. Please try again later.');
+        }
+      }
+
+      function displayBookings(bookings) {
+        const container = document.getElementById('bookingsContainer');
+        container.innerHTML = '';
+
+        bookings.forEach(booking => {
+          const movie = booking.movie;
+          const bookingDate = new Date(booking.bookingDate);
+          const formattedDate = bookingDate.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          });
+
+          const card = document.createElement('div');
+          card.className = 'bg-slate-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-700/50 overflow-hidden hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-300';
+          card.innerHTML = `
+            <div class="bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border-b border-slate-700/50 px-6 py-6">
+              <h3 class="text-xl font-bold text-cyan-300 mb-1">${movie.name}</h3>
+              <p class="text-slate-400 text-sm">Directed by ${movie.director}</p>
+            </div>
+            <div class="p-6 space-y-4">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-sm font-semibold uppercase tracking-wide">Seat Number</span>
+                <span class="px-4 py-2 bg-emerald-500/20 text-emerald-300 rounded-full text-sm font-bold border border-emerald-500/30">Seat ${booking.seatNumber}</span>
+              </div>
+              <div class="h-px bg-slate-700/50"></div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-sm font-semibold uppercase tracking-wide">Actor</span>
+                <span class="text-slate-200 font-medium">${movie.actor}</span>
+              </div>
+              <div class="h-px bg-slate-700/50"></div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-sm font-semibold uppercase tracking-wide">Duration</span>
+                <span class="text-slate-200 font-medium">${movie.duration} mins</span>
+              </div>
+              <div class="h-px bg-slate-700/50"></div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-sm font-semibold uppercase tracking-wide">Booking Date</span>
+                <span class="text-slate-200 font-medium">${formattedDate}</span>
+              </div>
+              <div class="h-px bg-slate-700/50"></div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-sm font-semibold uppercase tracking-wide">Status</span>
+                <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded-full text-sm font-bold border border-emerald-500/30">Confirmed</span>
+              </div>
+              <div class="pt-2">
+                <p class="text-slate-400 text-sm">
+                  <span class="font-semibold text-slate-300">Description:</span> ${movie.description}
+                </p>
+              </div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      function showError(message) {
+        const errorContainer = document.getElementById('errorContainer');
+        errorContainer.innerHTML = `
+          <div class="bg-red-500/10 border border-red-500/50 text-red-400 px-6 py-4 rounded-2xl flex gap-3">
+            <span class="text-xl font-bold">!</span>
+            <span class="font-semibold">${message}</span>
+          </div>
+        `;
+      }
+
+      async function logout() {
+        try {
+          const token = getToken();
+          await fetch(`${API_BASE_URL}/auth/logout`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { Authorization: `Bearer ${token}` } : {})
+            },
+            credentials: 'include'
+          });
+
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+        } catch (error) {
+          console.error('Error logging out:', error);
+          window.location.href = '/login';
+        }
+      }
+
+      document.getElementById('logoutBtn').addEventListener('click', logout);
+      document.getElementById('homeBtn').addEventListener('click', () => {
+        window.location.href = '/';
+      });
+      document.getElementById('bookBtn').addEventListener('click', () => {
+        window.location.href = '/booking';
+      });
+      document.getElementById('bookNowBtn')?.addEventListener('click', () => {
+        window.location.href = '/booking';
+      });
+    </script>
+  </body>
+</html>

@@ -8,28 +8,27 @@ import ticketRouter from './modules/ticket/ticket.router';
 import movieRouter from './modules/movie/movie.router';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-import { prisma } from "@/common/config/prisma";
-
-async function init() {
-    await prisma.movie.create({
-        data: {
-            name: 'Dhurandhar The Revenge',
-            description: 'Jassi ko ghar ki yaad kyu nhi aai?',
-            director: 'Dhurandar',
-            actor: 'Dhurandar',
-            duration: 230,
-        }
-    })
-    for (let i = 0; i < 100; i++) {
-        await prisma.ticket.create({
-            data: {
-                movieId: 1,
-                seat: i+1,
-                isBooked: false,
-            }
-        })
-    }
-}
+// import { prisma } from "@/common/config/prisma";
+// async function init() {
+//     await prisma.movie.create({
+//         data: {
+//             name: 'Dhurandhar The Revenge',
+//             description: 'Jassi ko ghar ki yaad kyu nhi aai?',
+//             director: 'Dhurandar',
+//             actor: 'Dhurandar',
+//             duration: 230,
+//         }
+//     })
+//     for (let i = 0; i < 100; i++) {
+//         await prisma.ticket.create({
+//             data: {
+//                 movieId: 1,
+//                 seat: i+1,
+//                 isBooked: false,
+//             }
+//         })
+//     }
+// }
 
 // init()
 
@@ -43,28 +42,37 @@ app.use('/health', (_, res) => {
 })
 app.use('/ticket', ticketRouter)
 app.use('/movie', movieRouter)
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.sendFile(__dirname + "/views/home.html");
 });
-app.get("/login", (req, res) => {
+app.get("/login", (_req, res) => {
   res.sendFile(__dirname + "/views/login.html");
 });
-app.get("/signup", (req, res) => {
+app.get("/signup", (_req, res) => {
   res.sendFile(__dirname + "/views/signup.html");
 });
-app.get("/booking", (req, res) => {
+app.get("/booking", (_req, res) => {
   res.sendFile(__dirname + "/views/booking.html");
 });
-app.use((err: ApiError | Error | any,  req: express.Request, res: express.Response, next: express.NextFunction) => {
+
+app.get("/my-bookings", (_req, res) => {
+  res.sendFile(__dirname + "/views/my-bookings.html");
+});
+
+app.get("/.well-known/appspecific/com.chrome.devtools.json", (_req, res) => {
+  res.status(204).send();
+});
+
+app.all("{*path}", (_req, _res) => {
+  throw ApiError.notFound(`Route ${_req.originalUrl} not found`);
+});
+
+app.use((err: ApiError | Error | any,  _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error(err);
   res.status(err.statusCode || 500).json({
     message: err.message || "Internal Server Error",
     error: err || null,
   });
-});
-
-app.all("{*path}", (req, res) => {
-  throw ApiError.notFound(`Route ${req.originalUrl} not found`);
 });
 
 

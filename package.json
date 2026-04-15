@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node dist/index.js",
     "debug": "node --inspect dist/index.js",
-    "dev": "tsx --watch src/index.ts && node --watch dist/index.js",
+    "dev": "tsx --watch src/index.ts",
+    "debug-dev": "tsx --inspect src/index.ts",
+    "debug-brk": "tsx --inspect-brk src/index.ts",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

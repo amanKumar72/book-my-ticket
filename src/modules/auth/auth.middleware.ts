@@ -5,18 +5,23 @@ import type { Request, Response, NextFunction } from "express"
 export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies?.token || req.headers.authorization?.split(' ')[1]
     if (!token) {
-        return ApiError.unauthorized('Token is missing')
-    }
-    const payload = verifyToken(token)
-    if (!payload) {
-        return ApiError.unauthorized('Token is invalid')
+        return next(ApiError.unauthorized('Token is missing'))
     }
 
-    req.user = payload as {
-        userId: number,
-        email?: string,
-        role?: string,
-    }
+    try {
+        const payload = verifyToken(token)
+        if (!payload) {
+            return next(ApiError.unauthorized('Token is invalid'))
+        }
 
-    next()
+        req.user = payload as {
+            userId: number,
+            email?: string,
+            role?: string,
+        }
+
+        next()
+    } catch (_error) {
+        return next(ApiError.unauthorized('Token is invalid'))
+    }
 }
